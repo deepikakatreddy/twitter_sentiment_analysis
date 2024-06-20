@@ -1,0 +1,15 @@
+import tweepy
+import pickle
+
+def authenticate_api(api_key, api_secret_key, access_token, access_token_secret):
+    auth = tweepy.OAuth1UserHandler(api_key, api_secret_key, access_token, access_token_secret)
+    return tweepy.API(auth)
+
+def analyze_sentiment(tweet, model_file):
+    with open(model_file, 'rb') as file:
+        model, vectorizer = pickle.load(file)
+    
+    tweet = vectorizer.transform([tweet])
+    sentiment = model.predict(tweet)
+    
+    return sentiment[0]
